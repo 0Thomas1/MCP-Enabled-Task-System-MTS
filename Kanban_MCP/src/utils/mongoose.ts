@@ -9,7 +9,7 @@ const uri = process.env.MONGODB_URI || "your_mongoDB_uri";
 const username = process.env.KANBAN_USERNAME || "your_Kanban_username"; // Replace with actual username / env var.
 
 const options = {
-  dbName: process.env.DBNAME || "your_db_name",
+  dbName: process.env.DB_NAME || "your_db_name",
 };
 
 // Expose a promise so callers can await DB readiness before serving requests.
