@@ -3,10 +3,10 @@
     "mcp-test-1": {
       "type": "stdio",
       "command": "node",
-      "args": ["--env-file=.env","build/index.js"],
+      "args": ["--env-file=.env","Kanban_MCP/build/index.js"],
       "cwd": "${workspaceFolder}",
       "dev": {
-        "watch": "build/**/*.js",
+        "watch": "Kanban_MCP/build/**/*.js",
         "debug": {
           "type": "node"
         }
