@@ -16,7 +16,14 @@ def MCP_install_dependencies():
     except subprocess.CalledProcessError as e:
         print(f"Error installing MCP dependencies: {e}")
 
+def mcp_build():
+    try:
+        subprocess.check_call(['npm', 'run', 'build'], cwd=MCP_dir)
+        print("MCP built successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error building MCP: {e}")
 
 if __name__ == "__main__":
     interface_install_dependencies()
     MCP_install_dependencies()
+    mcp_build()
