@@ -1,14 +1,21 @@
-from pymongo import MongoClient
+from pymongo import MongoClient 
+import certifi
+from pymongo.errors import ConnectionFailure
 from bson.objectid import ObjectId
+from pymongo.server_api import ServerApi
 import util
 
 class MongoModel:
   def __init__(self, username, uri=util.enum['MONGO_URI'], db_name=util.enum['DB_NAME']):
-    self.client = MongoClient(uri)
-    self.db = self.client[db_name]
-    self.tasks = self.db["tasks"]
-    self.username = username
-   
+    try:
+        self.client = MongoClient(uri, tlsCAFile=certifi.where(), server_api=ServerApi('1'))
+        self.db = self.client[db_name]
+        self.tasks = self.db["tasks"]
+        self.username = username
+    except ConnectionFailure as e:
+        print(f"Could not connect to MongoDB: {e}")
+        self.client = None
+
 
 
   # get the user tasks
