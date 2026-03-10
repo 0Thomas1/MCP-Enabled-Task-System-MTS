@@ -11,7 +11,7 @@ env.bak/
 venv.bak/
 
 #node modules
-/build
+build
 node_modules
 
 #macOS
