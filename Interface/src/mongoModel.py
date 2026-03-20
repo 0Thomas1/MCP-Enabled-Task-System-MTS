@@ -5,6 +5,7 @@ from bson.objectid import ObjectId
 from pymongo.server_api import ServerApi
 import util
 
+# This class is responsible for connecting to the MongoDB database and retrieving tasks for a specific user.
 class MongoModel:
   def __init__(self, username, uri=util.enum['MONGO_URI'], db_name=util.enum['DB_NAME']):
     try:
@@ -28,7 +29,7 @@ class MongoModel:
       tasks.append(task)
     return tasks
 
-  # get a task by id
+  # get tasks by status
   def get_task_by_status(self, status):
     res = list(self.tasks.find({"taskStatus": status},{'title': 1, 'description':1, 'taskStatus':1, 'updatedAt':1}))
     return res

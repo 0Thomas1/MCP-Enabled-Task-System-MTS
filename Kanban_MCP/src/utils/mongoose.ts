@@ -6,7 +6,7 @@ import Task from "./Task.js";
 // Prefer environment variable over hard-coded credentials. Fallback kept for now.
 const uri = process.env.MONGODB_URI || "your_mongoDB_uri";
 
-const username = process.env.KANBAN_USERNAME || "your_Kanban_username"; // Replace with actual username / env var.
+const username = process.env.KANBAN_USERNAME || "your_Kanban_username"; 
 
 const options = {
   dbName: process.env.DB_NAME || "your_db_name",
@@ -26,6 +26,7 @@ export interface CreateTaskParams {
   description: string;
 }
 
+// create a task and associate it with the user
 export async function createTask(params: CreateTaskParams): Promise<void> {
   const newTask = await Task.create({
     title: params.task_title,
@@ -45,7 +46,7 @@ export async function createTask(params: CreateTaskParams): Promise<void> {
     await user.save();
   }
 }
-
+// get all tasks for the user
 export async function getTasks() {
   try {
     const user = await User.findOne({
@@ -62,7 +63,7 @@ export async function getTasks() {
     throw new Error("Failed to retrieve tasks");
   }
 }
-
+// get tasks by status
 export async function getTasksByStatus(
   status?: "todo" | "inProgress" | "done"
 ) {
@@ -71,6 +72,7 @@ export async function getTasksByStatus(
   return all.filter((t: any) => t.taskStatus === status);
 }
 
+//move a task to a new status
 export async function moveTask(
   taskId: string,
   newStatus: "todo" | "inProgress" | "done"
@@ -88,6 +90,7 @@ export async function moveTask(
   }
 }
 
+// add a tag to a task
 export async function addTaskTag(taskId: string, tag: string) {
   try {
     const task = await Task.findById(taskId);
@@ -118,6 +121,7 @@ export async function addTaskTag(taskId: string, tag: string) {
 //   }
 // }
 
+// set task priority
 export async function setTaskPriority(
   taskId: string,
   priority: "low" | "medium" | "high"

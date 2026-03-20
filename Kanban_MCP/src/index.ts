@@ -5,6 +5,8 @@ import { z } from "zod";
 import * as mongooseUtils from "./utils/mongoose";
 import { CreateMessageResultSchema } from "@modelcontextprotocol/sdk/types.js";
 
+
+// Initialize the MCP server
 const server = new McpServer({
   name: "kanban-mcp",
   version: "1.0.0",
@@ -15,6 +17,7 @@ const server = new McpServer({
   },
 });
 
+// server resources
 server.resource(
   "tasks",
   "tasks://all",
@@ -24,7 +27,6 @@ server.resource(
     mimeType: "application/json",
   },
   async (uri) => {
-    // Don't block on DB init here; getTasks will fall back to cache if needed
     let tasks = await mongooseUtils.getTasks();
     return {
       contents: [
@@ -113,7 +115,7 @@ server.tool(
 
 // set priority
 server.tool(
-  "set-prioity",
+  "set-priority",
   "set a task to a different priority",
   {
     task_id: z.string(),
@@ -149,7 +151,7 @@ server.tool(
     }
   }
 );
-// show analytics
+// show analytics (Primitive example, can be extended with more complex analytics)
 server.prompt("tasks-analytics", "get analytics for users tasks", async () => {
   let tasks_stats = await getTasksStats();
   const statsString = JSON.stringify(tasks_stats, null, 2);
@@ -159,7 +161,7 @@ server.prompt("tasks-analytics", "get analytics for users tasks", async () => {
         role: "user",
         content: {
           type: "text",
-          text: `analize the lead time and current tasks status distribution from the given tasks stats and present them in a table:${statsString}`,
+          text: `analyze the lead time and current tasks status distribution from the given tasks stats and present them in a table:${statsString}`,
         },
       },
     ],
@@ -218,7 +220,7 @@ async function getTasksStats() {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  // Initialize DB in the background so we don't block MCP initialize handshake
+  // Initialize DB connection
   mongooseUtils.initDb.catch((err) => {
     console.error("DB initialization failed:", err);
   });
